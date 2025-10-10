@@ -176,6 +176,19 @@ def create_issues() -> None:
     run_commands("gh issue list")
 
 
+def move_org() -> None:
+    """Move to the main NaNoGenMo org."""
+    os.chdir(f"/tmp/update-repo/{this_year()}")
+    run_commands(f"gh api repos/hugovk/{this_year()}/transfer -f new_owner=NaNoGenMo")
+
+
+def make_public() -> None:
+    os.chdir(f"/tmp/update-repo/{this_year()}")
+    run_commands(
+        f"gh repo edit NaNoGenMo/{this_year()} --visibility public --accept-visibility-change-consequences"
+    )
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(
         description="Commands for generating a NaNoGenMo repo",
@@ -186,6 +199,8 @@ def main() -> None:
     parser.add_argument("--update-readme", action="store_true", help="Update README")
     parser.add_argument("--create-labels", action="store_true", help="Create labels")
     parser.add_argument("--create-issues", action="store_true", help="Create issues")
+    parser.add_argument("--move-org", action="store_true", help="Move to main org")
+    parser.add_argument("--make-public", action="store_true", help="Make repo public")
     args = parser.parse_args()
 
     if args.create_repo:
@@ -200,13 +215,14 @@ def main() -> None:
     if args.create_labels:
         create_labels()
 
-    if args.create_issues:
-        create_issues()
+    if args.move_org:
+        move_org()
+
+    if args.make_public:
+        make_public()
 
     # After doing all this:
     # [ ] check other repo settings
-    # [ ] transfer to NaNoGenMo org
-    # [ ] make public
     # [ ] add redirect to last year's repo
     # [ ] add this year to https://github.com/NaNoGenMo/nanogenmo.github.io/blob/main/index.html
 
