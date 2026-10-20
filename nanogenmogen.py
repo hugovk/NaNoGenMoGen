@@ -117,21 +117,24 @@ def update_readme() -> None:
     run_commands("git push")
 
 
+def label_names(repo: str) -> set[str]:
+    """Return the label names for a repo."""
+    output = subprocess.run(
+        ["gh", "label", "list", "-R", repo, "--json", "name", "--jq", ".[].name"],
+        capture_output=True,
+        check=True,
+        text=True,
+    ).stdout
+    return set(output.split("\n")) - {""}
+
+
 def create_labels() -> None:
+    """Copy last year's labels and delete any others, such as GitHub's defaults."""
     os.chdir(f"/tmp/update-repo/{this_year()}")
     run_commands(f"gh label clone NaNoGenMo/{last_year()}")
     run_commands("gh label list")
-    for old in (
-        "bug",
-        "documentation",
-        "duplicate",
-        "enhancement",
-        "good first issue",
-        "help wanted",
-        "invalid",
-        "question",
-        "wontfix",
-    ):
+    wanted = label_names(f"NaNoGenMo/{last_year()}")
+    for old in sorted(label_names(f"hugovk/{this_year()}") - wanted):
         run_commands(f'gh label delete --yes "{old}"')
     run_commands("gh label list")
     print(f"https://github.com/hugovk/{this_year()}/labels")
