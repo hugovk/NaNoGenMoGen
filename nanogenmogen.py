@@ -158,7 +158,7 @@ def create_issues() -> None:
 
     # Create issue 2 text
     text = "Links to previous years:\n\n"
-    for year in range(last_year(), 2016 - 1, -1):
+    for year in range(last_year(), 2017 - 1, -1):
         text += f"* [{year}](https://github.com/NaNoGenMo/{year}/issues/2)\n"
 
     text += "* [2016](https://github.com/NaNoGenMo/2016/issues/5)\n"
@@ -216,6 +216,9 @@ def main() -> None:
 
     if args.create_labels:
         create_labels()
+
+    if args.create_issues:
+        create_issues()
 
     if args.move_org:
         move_org()
