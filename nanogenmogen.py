@@ -93,13 +93,17 @@ def update_readme() -> None:
         (f"This is the {last_year()} edition.", f"This is the {this_year()} edition."),
         (
             f"* [{last_year() - 1}](https://github.com/NaNoGenMo/{last_year() - 1})",
-            f"* [{last_year()}](https://github.com/NaNoGenMo/{last_year()})\n"
-            f"* [{last_year() - 1}](https://github.com/NaNoGenMo/{last_year() - 1})",
+            (
+                f"* [{last_year()}](https://github.com/NaNoGenMo/{last_year()})\n"
+                f"* [{last_year() - 1}](https://github.com/NaNoGenMo/{last_year() - 1})"
+            ),
         ),
         (
             f"* [{last_year() - 1}](https://github.com/NaNoGenMo/{last_year() - 1}/issues/1)",
-            f"* [{last_year() - 1}](https://github.com/NaNoGenMo/{last_year() - 1}/issues/1)\n"
-            f"* [{last_year()}](https://github.com/NaNoGenMo/{last_year()}/issues/1)",
+            (
+                f"* [{last_year() - 1}](https://github.com/NaNoGenMo/{last_year() - 1}/issues/1)\n"
+                f"* [{last_year()}](https://github.com/NaNoGenMo/{last_year()}/issues/1)"
+            ),
         ),
     ):
         readme = readme.replace(old, new)
@@ -137,14 +141,12 @@ def create_issues() -> None:
     os.chdir(f"/tmp/update-repo/{this_year()}")
 
     # Create issue 1 text
-    text = textwrap.dedent(
-        """\
+    text = textwrap.dedent("""\
     This is an open issue where you can comment and add resources that might come in handy for NaNoGenMo.
 
     There are already a ton of resources on the old resources threads of previous editions:
 
-    """
-    )
+    """)
     for year in range(last_year(), 2016 - 1, -1):
         text += f"* [{year}](https://github.com/NaNoGenMo/{year}/issues/1)\n"
 
